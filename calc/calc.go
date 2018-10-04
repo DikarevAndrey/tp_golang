@@ -17,37 +17,42 @@ func calc(inputStream io.Reader, outputStream io.Writer) (resultErr error) {
 
 	reader := bufio.NewReader(inputStream)
 
-	stack := [10000]int{}
-	sp := 0
+	var stack []int
 	expression, _ := reader.ReadString('\n')
 
 	for _, char := range expression {
 		switch char {
 		case ' ':
 		case '=':
-			fmt.Fprintf(outputStream, "Result = %d\n", stack[sp-1])
-			sp--
+			fmt.Fprintf(outputStream, "Result = %d\n", stack[len(stack)-1])
 			return nil
 		case '+':
-			stack[sp-2] = stack[sp-2] + stack[sp-1]
-			sp--
+			op1, op2 := stack[len(stack)-2], stack[len(stack)-1]
+			stack = stack[:len(stack)-2]
+			res := op1 + op2
+			stack = append(stack, res)
 			break
 		case '-':
-			stack[sp-2] = stack[sp-2] - stack[sp-1]
-			sp--
+			op1, op2 := stack[len(stack)-2], stack[len(stack)-1]
+			stack = stack[:len(stack)-2]
+			res := op1 - op2
+			stack = append(stack, res)
 			break
 		case '*':
-			stack[sp-2] = stack[sp-2] * stack[sp-1]
-			sp--
+			op1, op2 := stack[len(stack)-2], stack[len(stack)-1]
+			stack = stack[:len(stack)-2]
+			res := op1 * op2
+			stack = append(stack, res)
 			break
 		case '/':
-			stack[sp-2] = stack[sp-2] / stack[sp-1]
-			sp--
+			op1, op2 := stack[len(stack)-2], stack[len(stack)-1]
+			stack = stack[:len(stack)-2]
+			res := op1 / op2
+			stack = append(stack, res)
 			break
 		default:
 			if value, err := strconv.Atoi(string(char)); err == nil {
-				stack[sp] = value
-				sp++
+				stack = append(stack, value)
 			} else {
 				panic("Incorrect input format")
 			}
