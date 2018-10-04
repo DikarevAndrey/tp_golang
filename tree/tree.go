@@ -1,3 +1,9 @@
 package main
 
-// сюда писать функцию DirTree
+import (
+	"io"
+)
+
+func dirTree(outStream io.Writer, path string, printFiles bool) string {
+	return "Test\n"
+}

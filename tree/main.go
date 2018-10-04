@@ -1,12 +1,14 @@
 package main
 
 import (
-	"fmt"
 	"io"
 	"os"
-	"path/filepath"
-	"strings"
 )
+
+func dirTree(outStream io.Writer, path string, printFiles bool) error {
+
+	return nil
+}
 
 func main() {
 	out := os.Stdout
