@@ -8,7 +8,8 @@ import (
 	"strconv"
 )
 
-func calc(inputStream io.Reader, outputStream io.Writer) (resultErr error) {
+// Calc calculates reverse Polish notation expression
+func Calc(inputStream io.Reader, outputStream io.Writer) (resultErr error) {
 	defer func() {
 		if err := recover(); err != nil {
 			resultErr = fmt.Errorf("recover: %v", err)
@@ -24,31 +25,50 @@ func calc(inputStream io.Reader, outputStream io.Writer) (resultErr error) {
 		switch char {
 		case ' ':
 		case '=':
+			if len(stack) != 1 {
+				panic("Incorrect input format")
+			}
 			fmt.Fprintf(outputStream, "Result = %d\n", stack[len(stack)-1])
 			return nil
 		case '+':
-			op1, op2 := stack[len(stack)-2], stack[len(stack)-1]
-			stack = stack[:len(stack)-2]
-			res := op1 + op2
-			stack = append(stack, res)
+			if len(stack) >= 2 {
+				op1, op2 := stack[len(stack)-2], stack[len(stack)-1]
+				stack = stack[:len(stack)-2]
+				res := op1 + op2
+				stack = append(stack, res)
+			} else {
+				panic("Incorrect input format")
+			}
 			break
 		case '-':
-			op1, op2 := stack[len(stack)-2], stack[len(stack)-1]
-			stack = stack[:len(stack)-2]
-			res := op1 - op2
-			stack = append(stack, res)
+			if len(stack) >= 2 {
+				op1, op2 := stack[len(stack)-2], stack[len(stack)-1]
+				stack = stack[:len(stack)-2]
+				res := op1 - op2
+				stack = append(stack, res)
+			} else {
+				panic("Incorrect input format")
+			}
 			break
 		case '*':
-			op1, op2 := stack[len(stack)-2], stack[len(stack)-1]
-			stack = stack[:len(stack)-2]
-			res := op1 * op2
-			stack = append(stack, res)
+			if len(stack) >= 2 {
+				op1, op2 := stack[len(stack)-2], stack[len(stack)-1]
+				stack = stack[:len(stack)-2]
+				res := op1 * op2
+				stack = append(stack, res)
+			} else {
+				panic("Incorrect input format")
+			}
 			break
 		case '/':
-			op1, op2 := stack[len(stack)-2], stack[len(stack)-1]
-			stack = stack[:len(stack)-2]
-			res := op1 / op2
-			stack = append(stack, res)
+			if len(stack) >= 2 {
+				op1, op2 := stack[len(stack)-2], stack[len(stack)-1]
+				stack = stack[:len(stack)-2]
+				res := op1 / op2
+				stack = append(stack, res)
+			} else {
+				panic("Incorrect input format")
+			}
 			break
 		default:
 			if value, err := strconv.Atoi(string(char)); err == nil {
@@ -62,7 +82,7 @@ func calc(inputStream io.Reader, outputStream io.Writer) (resultErr error) {
 }
 
 func main() {
-	err := calc(os.Stdin, os.Stdout)
+	err := Calc(os.Stdin, os.Stdout)
 	if err != nil {
 		fmt.Printf("unexpected error %v", err)
 	}
