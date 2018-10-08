@@ -1,1 +1,1 @@
-#TechnoPark Golang homeworks
+# TechnoPark Golang homeworks
